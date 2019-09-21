@@ -38,11 +38,22 @@ Valitse ruokakunta:
   </tr>
   <tr>
     <th>Lounas</th>
-    <td>Lasagne <a href="#">(x)</a></td>
-
+    <td>
+      Lasagne <form><input type="submit" name="kalenteri_id0" value="(x)"></form>
+      <br>
+      Pizza <input type="submit" name="kalenteri_id1" value="(x)"></form>
+    </td>
   </tr>
   <tr>
     <th>Päivällinen</th>
+
+    <?php
+    for ($x = 0; $x < 7;$x++)
+    {
+      echo "<td><form><input type=\"submit\" name=\"lisaa_resepti\" value=\"Lisää resepti\"></form></td>";
+    }
+    ?>
+
   </tr>
   <tr>
     <th>Iltapala</th>
