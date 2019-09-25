@@ -22,43 +22,86 @@ Valitse ruokakunta:
 <br>
 <br>
 
-<table id="ruokakalenteri">
-  <tr>
-    <th></th>
-    <th>Ma</th>
-    <th>Ti</th>
-    <th>Ke</th>
-    <th>To</th>
-    <th>Pe</th>
-    <th>La</th>
-    <th>Su</th>
-  </tr>
-  <tr>
-    <th>Aamiainen</th>
-  </tr>
-  <tr>
-    <th>Lounas</th>
-    <td>
-      Lasagne <form><input type="submit" name="kalenteri_id0" value="(x)"></form>
-      <br>
-      Pizza <input type="submit" name="kalenteri_id1" value="(x)"></form>
-    </td>
-  </tr>
-  <tr>
-    <th>Päivällinen</th>
+<?php
+$ruokailut = array();
+$ruokailu = array("","Aamiainen","Lounas","Päivällinen","Iltapala","Välipalat");
+$viikonpaivat = array("","Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai","Sunnuntai");
 
-    <?php
-    for ($x = 0; $x < 7;$x++)
+for($x=0;$x<6;$x++)
+{
+  $paivat = array($ruokailu[$x]);
+
+  for($y=1;$y<8;$y++)
+  {
+    if ($x == 0)
     {
-      echo "<td><form><input type=\"submit\" name=\"lisaa_resepti\" value=\"Lisää resepti\"></form></td>";
+      $paivat[] = $viikonpaivat[$y];
     }
-    ?>
+    else
+    {
+      $paivat[] = "Pizza";
+    }
 
-  </tr>
-  <tr>
-    <th>Iltapala</th>
-  </tr>
-  <tr>
-    <th>Välipalat</th>
-  </tr>
+  }
+
+  $ruokailut[] = $paivat;
+
+}
+
+?>
+
+<table id="ruokakalenteri">
+  <?php
+  for ($x=0;$x<6;$x++)
+  {
+    echo '<tr>';
+
+    for ($y=0;$y<8;$y++)
+    {
+      $temp_array = $ruokailut[$x];
+      $a = "td";
+
+      if ($x == 0)
+      {
+        $a = "th";
+      }
+
+      if ($y == 0)
+      {
+        $a = "th";
+      }
+
+      $b = "";
+      $e = "";
+
+      if ($x > 0)
+      {
+          if ($y >  0)
+          {
+
+            if ($temp_array[$y] != "")
+            {
+                $d = $x.$y;
+                $c = 'poista_'.$d;
+                $submit = "submit";
+                $lisaa = "lisaa_";
+                $teksti = "Lisää uusi";
+                $e = '<br><input type='.$submit.' name='.$lisaa.$d.' value='.$teksti.'>';
+                $b = ' <a href='.$c.'>(x)</a>';
+              }
+
+          }
+
+      }
+
+      echo '<'.$a.'>'.$temp_array[$y].$b.$e.'</'.$a.'>';
+
+
+
+    }
+
+    echo '</tr>';
+  }
+  ?>
+
 </table>
