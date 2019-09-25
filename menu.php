@@ -8,8 +8,8 @@
   <body>
     <nav>
       <ul>
-    <li><a href="#">Ruokakunta</a></li>
-    <li><a href="#">Ruokakalenteri</a></li>
+    <li><a href="index.php">Ruokakunta</a></li>
+    <li><a href="ruokakalenteri.php">Ruokakalenteri</a></li>
     <li><a href="#">Ostoslista</a></li>
     <li><a href="#">Ostokset</a></li>
     <li><a href="#">Reseptit</a></li>

@@ -93,3 +93,50 @@ div_3part
   padding: 10px;
   margin-left: -5px -20px -5px -5px;
 }
+
+section_calendar
+{
+  color: lightgray;
+  padding: 20px;
+  width: 70%;
+  height: 50%;
+
+
+}
+
+#ruokakalenteri
+{
+  width: 70%;
+  border: 1px solid lightgrey;
+}
+
+#ruokakalenteri tr:hover
+{
+  background-color: orange;
+}
+
+#ruokakalenteri tr:nth-child(even)
+{
+  background-color: lightgrey;
+}
+
+#ruokakalenteri th
+{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: lightgreen;
+  color: black;
+  width: 10%;
+  border: 1px solid lightgrey;
+
+}
+
+#ruokakalenteri td
+{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  border: 1px solid lightgrey;
+
+}
