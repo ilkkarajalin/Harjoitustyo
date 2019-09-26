@@ -112,7 +112,7 @@ section_calendar
 
 #ruokakalenteri tr:hover
 {
-  background-color: orange;
+  background-color: lightblue;
 }
 
 #ruokakalenteri tr:nth-child(even)
