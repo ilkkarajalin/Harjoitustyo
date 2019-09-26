@@ -85,16 +85,23 @@ for($x=0;$x<6;$x++)
                 $c = 'poista_'.$d;
                 $submit = "submit";
                 $lisaa = "lisaa_";
-                $teksti = "Lisää uusi";
-                $e = '<br><input type='.$submit.' name='.$lisaa.$d.' value='.$teksti.'>';
-                $b = ' <a href='.$c.'>(x)</a>';
+                $teksti = "Lisää valittu resepti";
+                $e = '<br><input type='.$submit.' name='.$lisaa.$d.' value="'.$teksti.'">';
+                $b = ' <a href='.$c.' title="Poista resepti">(x)</a>';
               }
 
           }
 
       }
 
-      echo '<'.$a.'>'.$temp_array[$y].$b.$e.'</'.$a.'>';
+      $title = 'Tähän paljon asiaa
+Ja lisää asiaa
+Ja voihan laittaa vielä Lisää
+Miksei enemmänkin
+Saisiko vielä tasattua vasemmalle?
+No saihan sen kun tasaa tässäkin';
+
+      echo '<'.$a.'><b title="'.$title.'">'.$temp_array[$y].'</b>'.$b.$e.'</'.$a.'>';
 
 
 
