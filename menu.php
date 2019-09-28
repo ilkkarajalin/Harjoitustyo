@@ -13,7 +13,7 @@
     <li><a href="ostoslista.php">Ostoslista</a></li>
     <li><a href="ostokset.php">Ostokset</a></li>
     <li><a href="reseptit.php">Reseptit</a></li>
-    <li><a href="#">Ruoka-aineet</a></li>
+    <li><a href="ruoka-aineet.php">Ruoka-aineet</a></li>
     <li><a href="#">Ylläpito</a></li>
       </ul>
   </nav>

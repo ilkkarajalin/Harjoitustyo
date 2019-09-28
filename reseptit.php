@@ -74,7 +74,7 @@ Valitse ruokakunta:
             <th>Rasvat</th>
             <td>9.4 g</td>
             <td>23.8 g</td>
-            <td>48 %</td>  
+            <td>48 %</td>
 
     </table>
   </div_3part>
