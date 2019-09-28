@@ -26,10 +26,10 @@ Päivämäärä
   Hankintayksikkö pkt
   <br><br>
   Määrä
-  <input type="number" name="ostettu_maara" value="1" size="1">
+  <input type="number" name="ostettu_maara" value="1" style="width: 3em">
   <br><br>
   Hinta yhteensä
-  <input type="number" name="hinta_yht" value="3.59" size="2">
+  <input type="number" name="hinta_yht" value="3.59" style="width: 5em">
   €
   <br><br>
   <input type="submit" name="Lisaa_ostos" value="Lisää">

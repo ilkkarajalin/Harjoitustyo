@@ -141,6 +141,10 @@ section_calendar
 
 }
 
+input[type=number]{
+    width: 20px;
+}
+
 tab4
 {
   margin-left: 4em;
