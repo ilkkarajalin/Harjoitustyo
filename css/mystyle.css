@@ -140,3 +140,33 @@ section_calendar
   border: 1px solid lightgrey;
 
 }
+
+tab4
+{
+  margin-left: 4em;
+}
+
+#ostoslista
+{
+    width: 50%;
+    border: 1px solid lightgrey;
+}
+
+#ostoslista th
+{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: lightgreen;
+  color: black;
+  width: 10%;
+  border: 1px solid lightgrey;
+}
+
+#ostoslista td
+{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  border: 1px solid lightgrey;
+}

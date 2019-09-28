@@ -112,3 +112,5 @@ No saihan sen kun tasaa tässäkin';
   ?>
 
 </table>
+
+<?php include "footer.php"; ?>
