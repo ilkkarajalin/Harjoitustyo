@@ -46,5 +46,5 @@
 
 
 </section_3part>
-  </body>
-</html>
+
+<?php include "footer.php"; ?>

@@ -1,4 +1,6 @@
 <?php include "menu.php"; ?>
+<section_3part>
+  <div_3part>
 <br>
 Valitse ruokakunta:
 <br>
@@ -11,17 +13,22 @@ Valitse ruokakunta:
     <option value="">Korhoset</option>
   </select>
 </form>
+</div_3part>
+</section_3part>
 <br>
-<form action"">
+<section_3part>
+  <div_3part>
+<form action="">
   <input type="submit" name="vko_alas" value="<<">
   Vko 39
   <input type="submit" name="vko_ylos" value=">>">
   <br>
   dd.mm.yyyy - dd.mm.yyy
-</from>
+</form>
+</div_3part>
+</section_3part>
 <br>
 <br>
-
 <?php
 $ruokailut = array();
 $ruokailu = array("","Aamiainen","Lounas","Päivällinen","Iltapala","Välipalat");
@@ -112,3 +119,5 @@ No saihan sen kun tasaa tässäkin';
   ?>
 
 </table>
+
+<?php include "footer.php"; ?>
