@@ -1,9 +1,13 @@
 <?php include "menu.php"; ?>
 <br>
+<section_3part>
+  <div_3part>
 Päivämäärä
 <br>
 <input type="date" value="<?php echo date('Y-m-d'); ?>" />
 <br>
+</div_3part>
+</section_3part>
 <section_3part>
 <div_3part>
 

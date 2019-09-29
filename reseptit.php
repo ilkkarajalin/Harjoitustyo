@@ -1,5 +1,6 @@
 <?php include "menu.php"; ?>
-
+<section_3part>
+  <div_3part>
 Valitse ruokakunta:
 <br>
 <form action="">
@@ -11,6 +12,8 @@ Valitse ruokakunta:
     <option value="">Korhoset</option>
   </select>
 </form>
+</div_3part>
+</section_3part>
 <br>
 
 <section_3part>

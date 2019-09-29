@@ -14,7 +14,7 @@
     <li><a href="ostokset.php">Ostokset</a></li>
     <li><a href="reseptit.php">Reseptit</a></li>
     <li><a href="ruoka-aineet.php">Ruoka-aineet</a></li>
-    <li><a href="#">Ylläpito</a></li>
+    <li><a href="yllapito.php">Ylläpito</a></li>
       </ul>
   </nav>
   <br>

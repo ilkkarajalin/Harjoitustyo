@@ -1,7 +1,10 @@
 <?php include "menu.php"; ?>
 <br>
+<section_3part>
+  <div_3part>
 Valitse ruokakunta:
 <br>
+
 <form action="">
   <select name="ruokakunta" onchange="">
     <option value="">Mainiot</option>
@@ -11,16 +14,21 @@ Valitse ruokakunta:
     <option value="">Korhoset</option>
   </select>
 </form>
-<br>
+</div_3part>
+</section_3part>
+
+<section_3part>
+  <div_3part>
 <form action"">
   <input type="submit" name="vko_alas" value="<<">
   Vko 39
   <input type="submit" name="vko_ylos" value=">>">
   <br>
   dd.mm.yyyy - dd.mm.yyy
-</from>
-<br>
-<br>
+</form>
+</div_3part>
+</section_3part>
+
 
 <?php
 $resepti_nimi = array("Marjapuuro","Paahtoleipä","Lohikeitto","Munakas","Karjalanpaisti","Lasagne","Jugurttimurot","Pannukakku","Hedelmäsmoothie","Banaani");
@@ -62,9 +70,6 @@ $ruokailut_nimi = array("Aamupalat","Lounaat","Päivälliset","Iltapalat","Väli
     ?>
   </div_3part>
   <div_3part>
-
-  </div_3part>
-  <div_3part>
     Ostoslista
     <br>
     <?php
@@ -91,7 +96,7 @@ $ruokailut_nimi = array("Aamupalat","Lounaat","Päivälliset","Iltapalat","Väli
         <td>1</td>
         <td>Pkt</td>
         <td>2.59 €</td>
-        <td>2.59 €</td>        
+        <td>2.59 €</td>
 
 
     </table>
