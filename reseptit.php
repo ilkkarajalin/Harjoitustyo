@@ -1,4 +1,5 @@
 <?php include "menu.php"; ?>
+<?php include "connection.php"; ?>
 <section_3part>
   <div_3part>
 Valitse ruokakunta:
@@ -40,12 +41,20 @@ Valitse ruokakunta:
   <div_3part>
     <br><br>
     Reseptin ruoka-aineet
+
     <select class="non_scroll" name="resptin_aineet" size="20" width="50">
-      <option value="">Lasagnelevyt 1 pkt 1.59 €</option>
-      <option value="">Tomaattimurska 1 prk 0.98 €</option>
-      <option value="">Juustoraaste Emmental 1 pss 1.59 €</option>
-      <option value="">Maito 1 ltr 0.68 €</option>
-      <option value="">Vehnäjauho 1 dl 0.05 €</option>
+
+      <?php
+      $ruoka_aineet=$db->query('SELECT ruoka_aine,reseptin_aineet.kaytto_maara,yksikot.yksikko FROM ruoka_aineet JOIN reseptin_aineet ON ruoka_aineet.ruoka_aine_id = reseptin_aineet.ruoka_aine_id JOIN yksikot ON ruoka_aineet.kaytto_yks_id=yksikot.yksikko_id WHERE reseptin_aineet.resepti_id=1');
+      foreach ($ruoka_aineet as $row)
+      {
+        echo '<option value="">'.$row['ruoka_aine'].' '.$row['kaytto_maara'].' '.$row['yksikko'].' 1.59 €</option>';
+      }
+
+       ?>
+
+      <!option value="">Lasagnelevyt 1 pkt 1.59 €</option>
+
     </select>
     <br>
     Reseptin paino 1530 g
