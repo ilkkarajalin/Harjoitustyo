@@ -8,6 +8,7 @@ if($salasana==$oikea_salasana)
 {
   $_SESSION['logged_in']=true;
   $_SESSION['username']=$kayttaja;
+  $_SESSION['ruoka_aine_valittu']=false;
   include "menu.php";
   echo '<section_3part><div_3part>';
   echo '<p>Olet kirjautunut Reseptoriin käyttäjänä '.$kayttaja.'</p>';
