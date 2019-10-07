@@ -6,6 +6,14 @@
 $query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet';
 $rajaa_ruoka_aine = false;
 print_r($_POST);
+
+$div2 = false;
+
+if (count($_POST) > 0)
+{
+  $div2 = true;
+}
+
 echo '<br>';
  ?>
 
@@ -24,6 +32,7 @@ if(isset($_POST['muokkaa_ruoka-aine']))
 
 if(isset($_POST['rajaa_ruoka-aine']))
 {
+  $div2 = false;
   echo '<br>Rajattu haku<br>';
   $query_str = "SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet WHERE ruoka_aine LIKE '%".$_POST['ruoka_aine']."%'";
 }
@@ -45,10 +54,11 @@ if(isset($_POST['muokkaa_ruoka-aine']))
 
 if(isset($_POST['lisaa_ruoka-aine']))
 {
+  $div2 = false;
   $query_str = "INSERT INTO ruoka_aineet VALUES(NULL,".$_SESSION['user_id'].",'".$_POST['ruoka_aine']."',1,1000,1,1000,0,0,0)";
     echo '<br>uusi ruoka-aine:<br>'.$query_str.'<br>';
     $kysely=$db->query($query_str);
-    $query_str = "";
+    $query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet';
 }
 
   ?>
@@ -60,7 +70,7 @@ if(isset($_POST['poista_aine']))
   $query_str = "DELETE FROM ruoka_aineet WHERE ruoka_aine_id=".$_POST['ruoka_aine_id'];
   echo '<br>poista ruoka-aine:<br>'.$query_str.'<br>';
   $kysely=$db->query($query_str);
-  $query_str = "";
+  $query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet';
 }
 ?>
 
@@ -131,6 +141,9 @@ if($_SESSION['ruoka_aine_valittu'])
   <br>
 
   <?php
+
+    if ($div2)
+    {
     $query_str = "SELECT hankinta_yks_id FROM ruoka_aineet where ruoka_aine_id=".$_SESSION['ruoka-aine_id'];
   //  echo '<br>Hankintaykiskkö id<br>'.$query_str;
     $kysely=$db->query($query_str);
@@ -147,18 +160,25 @@ if($_SESSION['ruoka_aine_valittu'])
   //  echo '<br>Yksiköt haettu<br>'.$query_str.'<br>';
 
 
-
+    }
    ?>
    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
 
      <?php
+        if ($div2)
+        {
         echo '<input type="hidden" name="ruoka_aine_id" value="'.$_SESSION['ruoka-aine_id'].'">';
+        echo 'Ruoka-aineen Hankintayksikkö<select name="hankinta_yks" onchange="">';
+        }
         ?>
-  Ruoka-aineen Hankintayksikkö
 
-  <select name="hankinta_yks" onchange="">
+
+
 
     <?php
+
+    if ($div2)
+    {
 
     $kysely=$db->query($query_str);
 
@@ -174,12 +194,16 @@ if($_SESSION['ruoka_aine_valittu'])
       echo '<option value='.$row['yksikko_id'].$valittu.'>'.$row['yksikko'].'</option>';
     }
 
+    }
     ?>
 
   </select>
   <br>
 
 <?php
+
+if ($div2)
+{
 
 $query_str = "SELECT kaytto_yks_id FROM ruoka_aineet where ruoka_aine_id=".$_SESSION['ruoka-aine_id'];
 //echo '<br>Käyttöyksikkö id<br>'.$query_str;
@@ -193,9 +217,6 @@ foreach ($kysely as $row)
 
 //echo '<br>Käyttöyksikkö='.$kaytto_yks_id.'<br>';
 
- ?>
-
-<?php
   $query_str = "SELECT paino_hankinta_yks FROM ruoka_aineet WHERE ruoka_aine_id=".$_SESSION['ruoka-aine_id'];
   $kysely=$db->query($query_str);
   $paino_hankinta=1000;
@@ -204,19 +225,25 @@ foreach ($kysely as $row)
   {
     $paino_hankinta = $row['paino_hankinta_yks'];
   }
- ?>
 
- Hankintayksikön paino
+echo 'Hankintayksikön paino';
 
- <?php
 echo '<input type="number" name="hankinta_paino" step="1" value="'.$paino_hankinta.'" style="width: 5em">';
+
+echo 'grammaa<br><br>Ruoka-aineen käyttöyksikkö<select name="kaytto_yks" onchange="">';
+
+}
 ?>
- grammaa
-<br>
-<br>
-  Ruoka-aineen käyttöyksikkö
-  <select name="kaytto_yks" onchange="">
+
+
+
+
+
     <?php
+
+    if ($div2)
+    {
+
     $query_str = "SELECT yksikko_id,yksikko FROM yksikot WHERE kayttaja_id=".$_SESSION['user_id'];
 
     $kysely=$db->query($query_str);
@@ -233,12 +260,16 @@ echo '<input type="number" name="hankinta_paino" step="1" value="'.$paino_hankin
       echo '<option value='.$row['yksikko_id'].$valittu.'>'.$row['yksikko'].'</option>';
     }
 
+  }
     ?>
    <br>
   </select>
   <br>
 
   <?php
+    if ($div2)
+    {
+
     $query_str = "SELECT paino_kaytto_yks FROM ruoka_aineet WHERE ruoka_aine_id=".$_SESSION['ruoka-aine_id'];
     $kysely=$db->query($query_str);
     $paino_kaytto=1000;
@@ -247,14 +278,14 @@ echo '<input type="number" name="hankinta_paino" step="1" value="'.$paino_hankin
     {
       $paino_kaytto = $row['paino_kaytto_yks'];
     }
-   ?>
 
-  Käyttöyksikön paino
-  <?php
+    echo 'Käyttöyksikön paino';
+
   echo '<input type="number" name="kaytto_paino" step="1" value="'.$paino_kaytto.'" style="width: 5em">';
-  ?>
-  grammaa
-  <?php
+
+  echo 'grammaa';
+
+
     $query_str = "SELECT sisalto_hiilih,sisalto_protei,sisalto_rasva FROM ruoka_aineet WHERE ruoka_aine_id=".$_SESSION['ruoka-aine_id'];
     $kysely=$db->query($query_str);
     $hiilih = 0;
@@ -268,36 +299,33 @@ echo '<input type="number" name="hankinta_paino" step="1" value="'.$paino_hankin
       $rasva = $row['sisalto_rasva'];
     }
 
-   ?>
-  <br>
-  <br>
-  Ruoka-aineen ravintosisältö / 100 g
-  <br>
-  Hiilihydraatit
-  <?php
+    echo '<br><br>Ruoka-aineen ravintosisältö / 100 g<br>Hiilihydraatit';
+
   echo '<input type="number" name="hiilihydraatit" step="0.1" value="'.$hiilih.'" style="width: 3em">';
-  ?>
-   / 100 g
-   <br>
-   Proteiinit
-   <?php
+
+  echo '/ 100 g<br>Proteiinit';
+
    echo '<input type="number" name="proteiinit" step="0.1" value="'.$proteiini.'" style="width: 3em">';
-   ?>
-    / 100 g
-    <br>
-    Rasvat
-    <?php
+
+   echo '/ 100 g<br>Rasvat';
+
     echo '<input type="number" name="rasvat" step="0.1" value="'.$rasva.'" style="width: 3em">';
+
+    echo '/ 100 g<br><br><input type="submit" name="paivita_aine" value="Päivitä ruoka-aine"><br><br>';
+    echo '<input type="submit" name="poista_aine" value="Poista ruoka-aine">';
+  }
     ?>
-     / 100 g
-     <br>
-     <br>
-     <input type="submit" name="paivita_aine" value="Päivitä ruoka-aine">
-     <br>
-     <br>
-     <input type="submit" name="poista_aine" value="Poista ruoka-aine">
-   </form>
+
+</form>
 </div_3part>
 </section_3part>
+
+
+
+
+
+
+
+
 
 <?php include "footer.php"; ?>
