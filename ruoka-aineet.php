@@ -3,7 +3,7 @@
 
 <?php
 
-$query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet';
+$query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet WHERE kayttaja_id='.$_SESSION['user_id'];
 $rajaa_ruoka_aine = false;
 print_r($_POST);
 

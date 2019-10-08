@@ -13,7 +13,7 @@ Valitse ruokakunta:
     <option value="">Virtaset</option>
     <option value="">Korhoset</option>
   </select>
-</form>
+  </form>
 </div_3part>
 </section_3part>
 <br>

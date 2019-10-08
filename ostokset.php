@@ -123,7 +123,7 @@ $query_str = "SELECT yksikko FROM yksikot JOIN ruoka_aineet ON ruoka_aineet.hank
 
   echo ' <b>'.$hankinta_yks_id.'</b>';
 
-  echo '<br><br>Määrä<input type="number" name="ostettu_maara" value="1" style="width: 3em"><br><br>';
+  echo '<br><br>Määrä<input type="number" name="ostettu_maara" value="1" step="0.01" style="width: 3em"><br><br>';
   echo 'Hinta yhteensä<input type="number" name="hinta_yht" value="1.00" step="0.01" style="width: 5em">€<br><br>';
   echo '<input type="submit" name="Lisaa_ostos" value="Lisää"></div_3part>';
 
