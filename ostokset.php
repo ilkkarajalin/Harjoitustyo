@@ -27,12 +27,13 @@ if(isset($_POST['valitse']))
 if(isset($_POST['Lisaa_ostos']))
 {
   //$query_str = "INSERT INTO ruoka_aineet VALUES(NULL,".$_SESSION['user_id'].",'".$_POST['ruoka_aine']."',1,1000,1,1000,0,0,0)";
-  $kayttaja_id = $_SESSION['user_id'];
+  $ruokakunta_id = $_POST['ruokakunta'];
   $pvm = $_POST['pvm'];
   $ruoka_aine_id = $_SESSION['ostos_id'];
   $hinta = $_POST['hinta_yht'] / $_POST['ostettu_maara'];
+  $maara = $_POST['ostettu_maara'];
 
-  $query_str = "INSERT INTO ostokset VALUES(NULL,".$kayttaja_id.",'".$pvm."',".$ruoka_aine_id.",".$hinta.")";
+  $query_str = "INSERT INTO ostokset VALUES(NULL,".$ruokakunta_id.",'".$pvm."',".$ruoka_aine_id.",".$hinta.",".$maara.")";
 
     echo '<br>uusi ostos:<br>'.$query_str.'<br>';
     $kysely=$db->query($query_str);
@@ -42,8 +43,25 @@ if(isset($_POST['Lisaa_ostos']))
  ?>
 
 <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+<section_3part>
+  <div_3part>
+    Valitse ruokakunta
+    <br>
+    <select name="ruokakunta">
+      <?php
+        $query_str2 = "SELECT * FROM ruokakunnat WHERE kayttaja_id=".$_SESSION['user_id']." ORDER BY ruokakunta";
+        $kysely=$db->query($query_str2);
 
-<br>
+        foreach ($kysely as $row)
+        {
+          echo '<option value='.$row['ruokakunta_id'].'>'.$row['ruokakunta'].'</option>';
+        }
+
+      ?>
+      <!option value="ruokakunnat0">Mainiot</option>
+    </select>
+  </div_3part>
+</section_3part>
 
 <section_3part>
   <div_3part>

@@ -81,6 +81,7 @@ if(isset($_POST['paivita_aine']))
   print_r($_POST);
   echo '<br>';
   $ruoka_aine_id = $_POST['ruoka_aine_id'];
+  $ruoka_aine_nimi = $_POST['ruoka_aine_nimi'];
   $hankinta_yks_id = $_POST['hankinta_yks'];
   $hankinta_paino = $_POST['hankinta_paino'];
   $kaytto_yks_id = $_POST['kaytto_yks'];
@@ -88,7 +89,7 @@ if(isset($_POST['paivita_aine']))
   $hiilih = $_POST['hiilihydraatit'];
   $proteiinit = $_POST['proteiinit'];
   $rasvat = $_POST['rasvat'];
-$query_str = "UPDATE ruoka_aineet SET kaytto_yks_id=".$kaytto_yks_id.", paino_kaytto_yks=".$kaytto_paino.", hankinta_yks_id=".$hankinta_yks_id.", paino_hankinta_yks=".$hankinta_paino.", sisalto_hiilih=".$hiilih.", sisalto_protei=".$proteiinit.", sisalto_rasva=".$rasvat." WHERE ruoka_aine_id=".$ruoka_aine_id;
+$query_str = "UPDATE ruoka_aineet SET ruoka_aine='".$ruoka_aine_nimi."', kaytto_yks_id=".$kaytto_yks_id.", paino_kaytto_yks=".$kaytto_paino.", hankinta_yks_id=".$hankinta_yks_id.", paino_hankinta_yks=".$hankinta_paino.", sisalto_hiilih=".$hiilih.", sisalto_protei=".$proteiinit.", sisalto_rasva=".$rasvat." WHERE ruoka_aine_id=".$ruoka_aine_id;
 echo '<br>'.$query_str.'<br';
 $kysely=$db->query($query_str);
 $query_str = "";
@@ -125,10 +126,12 @@ if($_SESSION['ruoka_aine_valittu'])
   $query_str = $query_str." ORDER BY ruoka_aine";
 
   $kysely=$db->query($query_str);
+  $muokattava_ruoka_aine = "";
 
   foreach ($kysely as $row)
   {
     echo '<option value='.$row['ruoka_aine_id'].'>'.$row['ruoka_aine'].'</option>';
+    $muokattava_ruoka_aine = $row['ruoka_aine'];
   }
   ?>
 
@@ -168,7 +171,7 @@ if($_SESSION['ruoka_aine_valittu'])
         if ($div2)
         {
         echo '<input type="hidden" name="ruoka_aine_id" value="'.$_SESSION['ruoka-aine_id'].'">';
-        echo 'Ruoka-aineen Hankintayksikkö<select name="hankinta_yks" onchange="">';
+        echo 'Ruoka-aine<br><input type="text" name="ruoka_aine_nimi" value="'.$muokattava_ruoka_aine.'"><br>Hankintayksikkö<select name="hankinta_yks" onchange="">';
         }
         ?>
 
