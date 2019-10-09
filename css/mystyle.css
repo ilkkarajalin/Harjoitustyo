@@ -80,6 +80,23 @@ div_3part
   padding: 5px 5px 5px 5px;
 }
 
+.pseudo_select
+{
+  border: 1px solid gray;
+  background-color: white;
+  width: auto;
+  height: auto;
+  font-size: 16px;
+  font: "times new roman";
+}
+
+.align_right
+{
+  font-size: 16px;
+  font: "times new roman";
+  align-content: right;
+}
+
 input["number"]
 {
   float: right;
