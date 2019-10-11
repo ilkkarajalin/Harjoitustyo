@@ -9,13 +9,19 @@
         </form>
         <br>
       Ruokakunnat:<br>
-    <select class="non_scroll" name="ruokakunnat" size="20" width="50">
-      <option value="ruokakunnat0">Mainiot</option>
-      <option value="ruokakunnat1">Juoniot</option>
-      <option value="ruokakunnat2">Meikäläiset</option>
-      <option value="ruokakunnat3">Virtaset</option>
-      <option value="ruokakunnat4">Korhoset</option>
-    </select>
+      <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+        <select name="ruokakunta" onchange="">
+          <?php
+            $query_str = "SELECT * FROM ruokakunnat WHERE kayttaja_id=".$_SESSION['user_id']." ORDER BY ruokakunta";
+            $kysely=$db->query($query_str);
+
+            foreach ($kysely as $row)
+            {
+              echo '<option value='.$row['ruokakunta_id'].$valittu.'>'.$row['ruokakunta'].'</option>';
+            }
+
+          ?>
+        </select>
 
   </div_3part>
     <br>

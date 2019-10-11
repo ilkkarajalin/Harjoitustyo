@@ -11,6 +11,11 @@ if(isset($_POST['ruokakunta']))
   $query_str_resepti = "SELECT * FROM reseptit WHERE ruokakunta_id=".$_SESSION['resepti_ruokakunta_id'];
 }
 
+if(isset($_POST['rajaa_resepti']))
+{
+    $query_str_resepti = "SELECT * FROM reseptit WHERE resepti LIKE '%".$_POST['resepti_haku']."%' AND ruokakunta_id=".$_SESSION['resepti_ruokakunta_id'];
+}
+
 if(isset($_POST['rajaa_ruoka-aine']))
 {
   $query_str_aine = "SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet WHERE ruoka_aine LIKE '%".$_POST['ruoka-aine_haku']."%' AND kayttaja_id=".$_SESSION['user_id']." ORDER BY ruoka_aine";
@@ -65,6 +70,15 @@ if(isset($_POST['lisaa_resepti']))
 {
   $query_str = "INSERT INTO reseptit VALUES(NULL,".$_SESSION['resepti_ruokakunta_id'].",'".$_POST['resepti_haku']."',100)";
   echo '<br>'.$query_str.'<br>';
+  $kysely=$db->query($query_str);
+}
+
+if(isset($_POST['poista_resepti']))
+{
+  $resepti_id = $_POST['reseptit'];
+  $query_str = "DELETE FROM reseptit WHERE resepti_id=".$resepti_id;
+  echo '<br>'.$query_str.'<br>';
+  $kysely=$db->query($query_str);
 }
 
 print_r($_POST);

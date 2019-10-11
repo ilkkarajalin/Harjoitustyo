@@ -1,34 +1,83 @@
 <?php include "menu.php"; ?>
+<?php include "connection.php"; ?>
+
+<?php
+$mod_today = 0;
+
+if(!isset($_SESSION['mod_week_ostos']))
+{
+    $_SESSION['mod_week_ostos'] = 0;
+}
+
+$weekday = date("w");
+echo '<br>weekday='.$weekday.'<br>';
+$mod_today = 0;
+
+if($weekday == 0)
+{
+  $mod_today = 6;
+}
+else
+{
+  $mod_today = $weekday - 1;
+}
+
+
+if(isset($_POST['vko_alas']))
+{
+  $_SESSION['mod_week_ostos'] = $_SESSION['mod_week_ostos'] - 1;
+}
+
+if(isset($_POST['vko_ylos']))
+{
+  $_SESSION['mod_week_ostos'] = $_SESSION['mod_week_ostos'] + 1;
+}
+
+$date_start = date("d.m.Y", strtotime('+'.(($mod_today * -1) + 7 + (($_SESSION['mod_week_ostos']-1) * 7)).' days'));
+$date_end = date("d.m.Y", strtotime('+'.(($mod_today * -1) + 6 + ($_SESSION['mod_week_ostos'] * 7)).' days'));
+
+$query_start = date("Y-m-d", strtotime('+'.(($mod_today * -1) + 7 + (($_SESSION['mod_week_ostos']-1) * 7)).' days'));
+$query_end = date("Y-m-d", strtotime('+'.(($mod_today * -1) + 6 + ($_SESSION['mod_week_ostos'] * 7)).' days'));
+
+ ?>
+
+
+
 <br>
-<section_3part>
-  <div_3part>
 Valitse ruokakunta:
 <br>
-
-<form action="">
+<form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
   <select name="ruokakunta" onchange="">
-    <option value="">Mainiot</option>
-    <option value="">Juoniot</option>
-    <option value="">Meikäläiset</option>
-    <option value="">Virtaset</option>
-    <option value="">Korhoset</option>
+    <?php
+      $query_str = "SELECT * FROM ruokakunnat WHERE kayttaja_id=".$_SESSION['user_id']." ORDER BY ruokakunta";
+      echo '<br>'.$query_str.'<br>';
+      $kysely=$db->query($query_str);
+
+      foreach ($kysely as $row)
+      {
+        echo '<option value='.$row['ruokakunta_id'].$valittu.'>'.$row['ruokakunta'].'</option>';
+      }
+
+    ?>
+    <input type="submit" name="valitse_ruokakunta" value="Valitse">
   </select>
-</form>
+  </form>
 </div_3part>
 </section_3part>
-
+<br>
 <section_3part>
   <div_3part>
-<form action"">
+<form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
   <input type="submit" name="vko_alas" value="<<">
-  Vko 39
+  <?php echo 'Vko '.date("W", strtotime('+'.(($mod_today * -1) + 7 + (($_SESSION['mod_week_ostos']-1) * 7)).' days')); ?>
   <input type="submit" name="vko_ylos" value=">>">
   <br>
-  dd.mm.yyyy - dd.mm.yyy
+  <?php
+  echo $date_start.'-'.$date_end;
+  ?>
 </form>
 </div_3part>
 </section_3part>
-
 
 <?php
 $resepti_nimi = array("Marjapuuro","Paahtoleipä","Lohikeitto","Munakas","Karjalanpaisti","Lasagne","Jugurttimurot","Pannukakku","Hedelmäsmoothie","Banaani");
@@ -43,33 +92,48 @@ $valipalat = array(8,9);
 $viikon_ruokailut = array($aamupalat,$lounaat,$paivalliset,$iltapalat,$valipalat);
 $ruokailut_nimi = array("Aamupalat","Lounaat","Päivälliset","Iltapalat","Välipalat");
 
+$ruokailut = array("Aamiainen","Lounas","Paivallinen","Iltapala","Valipalat");
+$n_ruokailut = array (0,0,0,0,0);
+
+for($q=0;$q<5;$q++)
+{
+  $query_str = "SELECT count(id) FROM ruokakalenteri WHERE ruokailu='".$ruokailut[$q]."' AND pvm>='".$query_start."' AND pvm <='".$query_end."'";
+  echo '<br>'.$query_str.'<br>';
+  $kysely=$db->query($query_str);
+
+  foreach ($kysely as $row)
+  {
+    $n_ruokailut[$q] = $row['count(id)'];
+  }
+}
+
 ?>
+
 
 <section_3part>
   <div_3part>
     Viikon suunnitellut ruokailut
     <br>
+    <div class="pseudo_select">
     <?php
 
     for ($x=0;$x<5;$x++)
     {
-      if (count($viikon_ruokailut[$x]) > 0)
-      {
-          echo '<b>'.$ruokailut_nimi[$x].' '.count($viikon_ruokailut[$x]).' kpl</b><br>';
+        if ($n_ruokailut[$x] > 0)
+        {
+          echo '<b>'.$ruokailut_nimi[$x].' '.$n_ruokailut[$x].' kpl</b><br>';
 
-          for ($y=0;$y<count($viikon_ruokailut[$x]);$y++)
-          {
-            $reseptien_idt = $viikon_ruokailut[$x];
-            $reseptin_id = $reseptien_idt[$y];
+          $query_str = "SELECT count(id) FROM ruokakalenteri WHERE ruokailu='".$ruokailut[$q]."' AND pvm>='".$query_start."' AND pvm <='".$query_end."'";
+          echo '<br>'.$query_str.'<br>';
 
-            echo '<tab4>'.$resepti_nimi[$reseptin_id].'</tab4><br>';
-          }
+        }
 
-      }
     }
     ?>
+  </div>
   </div_3part>
   <div_3part>
+    <div class="pseudo_select">
     Ostoslista
     <br>
     <?php
@@ -100,6 +164,7 @@ $ruokailut_nimi = array("Aamupalat","Lounaat","Päivälliset","Iltapalat","Väli
 
 
     </table>
+  </div>
   </div_3part>
 </section_3part>
 

@@ -1,17 +1,111 @@
 <?php include "menu.php"; ?>
+<?php include "connection.php"; ?>
+
+<?php
+$ruokailut = array();
+$ruokailu = array("","Aamiainen","Lounas","Päivällinen","Iltapala","Välipalat");
+
+print_r($_POST);
+
+$weekday = date("w");
+echo '<br>weekday='.$weekday.'<br>';
+$mod_today = 0;
+
+if(!isset($_SESSION['mod_week']))
+{
+    $_SESSION['mod_week'] = 0;
+}
+
+if($weekday == 0)
+{
+  $mod_today = 6;
+}
+else
+{
+  $mod_today = $weekday - 1;
+}
+echo '<br>mod_today='.$mod_today.'<br>';
+
+if(isset($_POST['vko_alas']))
+{
+  $_SESSION['mod_week'] = $_SESSION['mod_week'] - 1;
+}
+
+if(isset($_POST['vko_ylos']))
+{
+  $_SESSION['mod_week'] = $_SESSION['mod_week'] + 1;
+}
+
+$date_start = date("d.m.Y", strtotime('+'.(($mod_today * -1) + 7 + (($_SESSION['mod_week']-1) * 7)).' days'));
+$date_end = date("d.m.Y", strtotime('+'.(($mod_today * -1) + 6 + ($_SESSION['mod_week'] * 7)).' days'));
+
+
+if(isset($_POST['valitse_ruokakunta']))
+{
+  $_SESSION['kalenteri_ruokakunta'] = $_POST['ruokakunta'];
+}
+
+$query_str_resepti = "SELECT * FROM reseptit WHERE ruokakunta_id=".$_SESSION['kalenteri_ruokakunta'];
+
+if(isset($_POST['rajaa_resepti']))
+{
+  $rajaa = $_POST['resepti_haku'];
+  $query_str_resepti = "SELECT * FROM reseptit WHERE resepti LIKE '%".$rajaa."%' AND ruokakunta_id=".$_SESSION['kalenteri_ruokakunta'];
+}
+echo '<br>'.$query_str_resepti.'<br>';
+
+if(isset($_POST['lisaa_resepti']))
+{
+  $ruok = floor($_POST['lisaa_resepti']/10);
+  $paiva = $_POST['lisaa_resepti'] - 10*$ruok;
+
+  if(!isset($_POST['reseptit']))
+  {
+    echo '<br>Valitse resepti ennen lisäämistä<br>';
+  }
+  else
+  {
+    $lisaa_pvm = date("Y-m-d", strtotime('+'.(($mod_today * -1) + 6 + $paiva + (($_SESSION['mod_week']-1) * 7)).' days'));
+    $lisaa_ruokailu = $ruokailu[$ruok];
+    $lisaa_ruokakunta = $_SESSION['kalenteri_ruokakunta'];
+    $lisaa_resepti_id = $_POST['reseptit'];
+
+    //echo '<br>ruok='.$ruok.' paiva='.$paiva.'<br>';
+    $query_str = "INSERT INTO ruokakalenteri VALUES(NULL,'".$lisaa_pvm."','".$lisaa_ruokailu."',".$lisaa_ruokakunta.",".$lisaa_resepti_id.")";
+    echo '<br>'.$query_str.'<br>';
+    $kysely=$db->query($query_str);
+  }
+
+}
+
+if(isset($_POST['poista_kalenteri']))
+{
+  $query_str = "DELETE FROM ruokakalenteri WHERE id=".$_POST['poista_kalenteri'];
+  echo '<br>'.$query_str.'<br>';
+  $kysely=$db->query($query_str);
+}
+
+ ?>
 
 <section_3part>
   <div_3part>
 <br>
 Valitse ruokakunta:
 <br>
-<form action="">
+<form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
   <select name="ruokakunta" onchange="">
-    <option value="">Mainiot</option>
-    <option value="">Juoniot</option>
-    <option value="">Meikäläiset</option>
-    <option value="">Virtaset</option>
-    <option value="">Korhoset</option>
+    <?php
+      $query_str = "SELECT * FROM ruokakunnat WHERE kayttaja_id=".$_SESSION['user_id']." ORDER BY ruokakunta";
+      echo '<br>'.$query_str.'<br>';
+      $kysely=$db->query($query_str);
+
+      foreach ($kysely as $row)
+      {
+        echo '<option value='.$row['ruokakunta_id'].$valittu.'>'.$row['ruokakunta'].'</option>';
+      }
+
+    ?>
+    <input type="submit" name="valitse_ruokakunta" value="Valitse">
   </select>
   </form>
 </div_3part>
@@ -19,21 +113,39 @@ Valitse ruokakunta:
 <br>
 <section_3part>
   <div_3part>
-<form action="">
+<form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
   <input type="submit" name="vko_alas" value="<<">
-  Vko 39
+  <?php echo 'Vko '.date("W", strtotime('+'.(($mod_today * -1) + 7 + (($_SESSION['mod_week']-1) * 7)).' days')); ?>
   <input type="submit" name="vko_ylos" value=">>">
   <br>
-  dd.mm.yyyy - dd.mm.yyy
+  <?php
+  echo $date_start.'-'.$date_end;
+  ?>
 </form>
 </div_3part>
 </section_3part>
 <br>
 <br>
 <?php
-$ruokailut = array();
-$ruokailu = array("","Aamiainen","Lounas","Päivällinen","Iltapala","Välipalat");
+
+$kalenteri = array();
+
+for($k=0;$k<8;$k++)
+{
+  $kalenteri[] = array("","","","","","","","");
+}
+
+for($k=0;$k<6;$k++)
+{
+  $kalenteri[$k][0] = '<th>'.$ruokailu[$k].'</th>';
+}
+
 $viikonpaivat = array("","Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai","Sunnuntai");
+
+for($k=0;$k<8;$k++)
+{
+  $kalenteri[0][$k] = '<th>'.$viikonpaivat[$k].'</th>';
+}
 
 for($x=0;$x<6;$x++)
 {
@@ -58,67 +170,127 @@ for($x=0;$x<6;$x++)
 
 ?>
 
+<form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+<section_3part>
+  <div_3part>
+    <input type="text" name="resepti_haku" values="" placeholder="Rajaa reseptejä" size="25">
+    <input type="submit" name="rajaa_resepti" value="Rajaa">
+    <br>
+    Reseptit
+    <select class="non_scroll" name="reseptit" size="20" width="50">
+
+      <?php
+      $kysely=$db->query($query_str_resepti);
+
+      foreach ($kysely as $row)
+      {
+
+        echo '<option value='.$row['resepti_id'].'>'.$row['resepti'].'</option>';
+      }
+
+      ?>
+    </select>
+  </div_3part>
+
+  <div_3part>
+<div class="pseudo_select">
+
+<form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+
 <table id="ruokakalenteri">
   <?php
-  for ($x=0;$x<6;$x++)
+  for ($x=1;$x<6;$x++)
   {
-    echo '<tr>';
+    //echo '<tr>';
 
-    for ($y=0;$y<8;$y++)
+    for ($y=1;$y<8;$y++)
     {
+      $f = $x*10+$y;
       $temp_array = $ruokailut[$x];
       $a = "td";
-
-      if ($x == 0)
-      {
-        $a = "th";
-      }
-
-      if ($y == 0)
-      {
-        $a = "th";
-      }
-
       $b = "";
       $e = "";
+      $query_date = "";
+      $paivan_reseptit = "";
 
-      if ($x > 0)
+      $query_date = date("Y-m-d", strtotime('+'.(($mod_today * -1) + 7 + (($_SESSION['mod_week']-1) * 7) + ($y - 1)).' days'));
+
+      $query_str = "SELECT ruokakalenteri.id, ruokakalenteri.resepti_id,reseptit.resepti FROM ruokakalenteri JOIN reseptit ON reseptit.resepti_id=ruokakalenteri.resepti_id WHERE ruokakalenteri.ruokakunta_id=1 AND ruokakalenteri.pvm='".$query_date."' AND ruokakalenteri.ruokailu='".$ruokailu[$x]."'";
+                //echo '<br>'.$query_str.'<br>';
+
+      $kysely=$db->query($query_str);
+
+      $paivan_reseptit = '<'.$a.'>';
+
+      foreach ($kysely as $row)
       {
-          if ($y >  0)
-          {
+          $id = $row['id'];
+          $resepti_nimi = $row['resepti'];
 
-            if ($temp_array[$y] != "")
-            {
-                $d = $x.$y;
-                $c = 'poista_'.$d;
-                $submit = "submit";
-                $lisaa = "lisaa_";
-                $teksti = "Lisää valittu resepti";
-                $e = '<br><input type='.$submit.' name='.$lisaa.$d.' value="'.$teksti.'">';
-                $b = ' <a href='.$c.' title="Poista resepti">(x)</a>';
-              }
+          if(isset($resepti_nimi))
+          {
+                    $title = 'Tähän paljon asiaa
+              Ja lisää asiaa
+              Ja voihan laittaa vielä Lisää
+              Miksei enemmänkin
+              Saisiko vielä tasattua vasemmalle?
+              No saihan sen kun tasaa tässäkin';
+
+                  $paivan_reseptit = $paivan_reseptit.'<b title="'.$title.'">';
+                  $paivan_reseptit = $paivan_reseptit.$resepti_nimi.'</b>';
+                  $paivan_reseptit = $paivan_reseptit.'<button type="submit" name="poista_kalenteri" value="'.$row['id'].'">X</button><br>';
+                                    //.$temp_array[$y].'</b>'.$b.$e.$query_date.'</'.$a.'>';
 
           }
 
       }
 
-      $title = 'Tähän paljon asiaa
-Ja lisää asiaa
-Ja voihan laittaa vielä Lisää
-Miksei enemmänkin
-Saisiko vielä tasattua vasemmalle?
-No saihan sen kun tasaa tässäkin';
+      $paivan_reseptit = $paivan_reseptit.'<button type="submit" name="lisaa_resepti" value="'.$f.'">Lisää valittu resepti</button><br>';
+      $paivan_reseptit = $paivan_reseptit.'</'.$a.'>';
 
-      echo '<'.$a.'><b title="'.$title.'">'.$temp_array[$y].'</b>'.$b.$e.'</'.$a.'>';
-
-
+      $kalenteri[$x][$y] = $paivan_reseptit;
 
     }
 
+
+
+
+
+          //echo $paivan_reseptit;
+
+    }
+
+    //echo '</tr>';
+
+
+
+
+  for($rivi=0;$rivi<6;$rivi++)
+  {
+    echo '<tr>';
+
+    for($sarake=0;$sarake<8;$sarake++)
+    {
+        if($kalenteri[$rivi][$sarake] == "")
+        {
+          echo '<td></td>';
+        }
+        else
+        {
+          echo $kalenteri[$rivi][$sarake];
+        }
+    }
+
     echo '</tr>';
+
   }
+
   ?>
 
 </table>
+</form>
+</div>
+</div_3part>
+</section_3part>
 
 <?php include "footer.php"; ?>

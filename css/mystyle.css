@@ -124,13 +124,11 @@ section_calendar
   padding: 20px;
   width: 70%;
   height: 50%;
-
-
 }
 
 #ruokakalenteri
 {
-  width: 70%;
+  width: auto;
   border: 1px solid lightgrey;
   margin-left: 20px;
 }
