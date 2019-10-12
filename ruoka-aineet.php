@@ -5,7 +5,7 @@
 
 $query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet WHERE kayttaja_id='.$_SESSION['user_id'];
 $rajaa_ruoka_aine = false;
-print_r($_POST);
+//print_r($_POST);
 
 $div2 = false;
 
@@ -23,7 +23,7 @@ if(isset($_POST['muokkaa_ruoka-aine']))
   $ruoka_aine = $_POST['ruoka_aine'];
   //$ruoka_aine_id = $_POST['ruoka_aine_id'];
   $_SESSION['ruoka_aine_valittu'] = true;
-  print_r($_POST);
+  //print_r($_POST);
 
 }
 ?>
@@ -33,8 +33,9 @@ if(isset($_POST['muokkaa_ruoka-aine']))
 if(isset($_POST['rajaa_ruoka-aine']))
 {
   $div2 = false;
-  echo '<br>Rajattu haku<br>';
+  //echo '<br>Rajattu haku<br>';
   $query_str = "SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet WHERE ruoka_aine LIKE '%".$_POST['ruoka_aine']."%'";
+
 }
  ?>
 
@@ -42,10 +43,10 @@ if(isset($_POST['rajaa_ruoka-aine']))
 
 if(isset($_POST['muokkaa_ruoka-aine']))
 {
-  echo '<br>Valittu ruoka-aine<br>';
+  //echo '<br>Valittu ruoka-aine<br>';
   $_SESSION['ruoka-aine_id'] = $_POST['ruoka-aineet'];
   $query_str = "SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet WHERE ruoka_aine_id=".$_POST['ruoka-aineet'];
-  echo '<br>'.$query_str.'<br>';
+  //echo '<br>'.$query_str.'<br>';
 }
 
  ?>
@@ -56,7 +57,7 @@ if(isset($_POST['lisaa_ruoka-aine']))
 {
   $div2 = false;
   $query_str = "INSERT INTO ruoka_aineet VALUES(NULL,".$_SESSION['user_id'].",'".$_POST['ruoka_aine']."',1,1000,1,1000,0,0,0)";
-    echo '<br>uusi ruoka-aine:<br>'.$query_str.'<br>';
+    //echo '<br>uusi ruoka-aine:<br>'.$query_str.'<br>';
     $kysely=$db->query($query_str);
     $query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet';
 }
@@ -68,7 +69,7 @@ if(isset($_POST['poista_aine']))
 {
 
   $query_str = "DELETE FROM ruoka_aineet WHERE ruoka_aine_id=".$_POST['ruoka_aine_id'];
-  echo '<br>poista ruoka-aine:<br>'.$query_str.'<br>';
+  //echo '<br>poista ruoka-aine:<br>'.$query_str.'<br>';
   $kysely=$db->query($query_str);
   $query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet';
 }
@@ -77,9 +78,9 @@ if(isset($_POST['poista_aine']))
 <?php
 if(isset($_POST['paivita_aine']))
 {
-  echo '<br>';
-  print_r($_POST);
-  echo '<br>';
+  //echo '<br>';
+  //print_r($_POST);
+  //echo '<br>';
   $ruoka_aine_id = $_POST['ruoka_aine_id'];
   $ruoka_aine_nimi = $_POST['ruoka_aine_nimi'];
   $hankinta_yks_id = $_POST['hankinta_yks'];
@@ -90,7 +91,7 @@ if(isset($_POST['paivita_aine']))
   $proteiinit = $_POST['proteiinit'];
   $rasvat = $_POST['rasvat'];
 $query_str = "UPDATE ruoka_aineet SET ruoka_aine='".$ruoka_aine_nimi."', kaytto_yks_id=".$kaytto_yks_id.", paino_kaytto_yks=".$kaytto_paino.", hankinta_yks_id=".$hankinta_yks_id.", paino_hankinta_yks=".$hankinta_paino.", sisalto_hiilih=".$hiilih.", sisalto_protei=".$proteiinit.", sisalto_rasva=".$rasvat." WHERE ruoka_aine_id=".$ruoka_aine_id;
-echo '<br>'.$query_str.'<br';
+//echo '<br>'.$query_str.'<br';
 $kysely=$db->query($query_str);
 $query_str = "";
 

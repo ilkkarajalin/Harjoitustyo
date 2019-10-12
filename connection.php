@@ -3,7 +3,7 @@ try
 {
   $dsn = "mysql:host=localhost;dbname=reseptori";
   $db = new PDO ($dsn, "phpUser", "phpPass");
-  print ("Connected\n");
+  //print ("Connected\n");
 }
   catch (PDOException $e)
 {

@@ -88,10 +88,26 @@
 </td>
   <tr>
   <th>Annoskoko</th><td>
-  250 g
+
+<?php
+$query_str = "SELECT annoskoko FROM reseptit WHERE resepti_id=".$_SESSION['resepti_id'];
+//echo '<br>'.$query_str.'<br>';
+$kysely=$db->query($query_str);
+
+foreach ($kysely as $row)
+{
+  $annoskoko = $row['annoskoko'];
+}
+
+echo '<input type="number" step="1" name="annos_koko" value='.$annoskoko.' style="width: 5em"> g';
+
+ ?>
+  </td>
+  <td>
+    <input type="submit" name="muokka_annos" value="Muokkaa">
   </td>
   <tr>
-  <th>Energiasisältö / annos</th><td>1100 kJ / 250 g</td>
+  <?php echo '<th>Energiasisältö / annos</th><td>'.round($energia*$annoskoko/100,0).' kJ / '.$annoskoko.' g</td>'; ?>
   <tr>
   <?php echo '<th>Reseptin hinta</th><td>'.$reseptin_hinta.' €</td>'; ?>
 </table>
@@ -110,7 +126,11 @@
       echo round(($sis_h / $reseptin_paino),1).' g';
       ?>
       </td>
-      <td>51 g</td>
+      <td>
+      <?php
+      echo round(($sis_h / $reseptin_paino * $annoskoko / 100),1).' g';
+      ?>
+      </td>
       <td>
       <?php
       echo round(($sis_h * 100 / $reseptin_paino) * $hiilihydraatti / $energia,1).' %';
@@ -123,7 +143,11 @@
         echo round(($sis_p / $reseptin_paino),1).' g';
         ?>
         </td>
-        <td>30.4 g</td>
+        <td>
+          <?php
+        echo round(($sis_p / $reseptin_paino * $annoskoko / 100),1).' g';
+        ?>
+      </td>
         <td>
         <?php
         echo round(($sis_p * 100 / $reseptin_paino) * $proteiini / $energia,1).' %';
@@ -136,7 +160,11 @@
           echo round(($sis_r / $reseptin_paino),1).' g';
           ?>
           </td>
-          <td>23.8 g</td>
+          <td>
+            <?php
+          echo round(($sis_r / $reseptin_paino * $annoskoko / 100),1).' g';
+          ?>
+        </td>
           <td>
           <?php
           echo round(($sis_r * 100 / $reseptin_paino) * $rasva / $energia,1).' %';

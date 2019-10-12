@@ -40,14 +40,14 @@ if(isset($_POST['muokkaa']))
   $taulun_id = $inputs[1];
   $taulun_arvo = $_POST[$taulun_id];
 
-  echo '<br>Muokattava resepti_id='.$resepti_id.' ja uusi arvo='.$taulun_arvo.'<br>';
+  //echo '<br>Muokattava resepti_id='.$resepti_id.' ja uusi arvo='.$taulun_arvo.'<br>';
 
   $query_str = "UPDATE reseptin_aineet SET kaytto_maara=".$taulun_arvo." WHERE id=".$resepti_id;
-  echo '<br>'.$query_str.'<br>';
+  //echo '<br>'.$query_str.'<br>';
 
   $kysely=$db->query($query_str);
 
-  echo '<br>';
+  //echo '<br>';
 
 }
 
@@ -55,21 +55,21 @@ if(isset($_POST['lisaa_ruoka-aine']))
 {
   $ruoka_aine_id = $_POST['reseptin_aineet'];
   $query_str = "INSERT INTO reseptin_aineet VALUES(NULL,".$_SESSION['resepti_id'].",".$ruoka_aine_id.",1)";
-  echo '<br>'.$query_str.'<br>';
+  //echo '<br>'.$query_str.'<br>';
   $kysely=$db->query($query_str);
 }
 
 if(isset($_POST['poista']))
 {
   $query_str = "DELETE FROM reseptin_aineet WHERE id=".$_POST['poista'];
-  echo '<br>'.$query_str.'<br>';
+  //echo '<br>'.$query_str.'<br>';
   $kysely=$db->query($query_str);
 }
 
 if(isset($_POST['lisaa_resepti']))
 {
   $query_str = "INSERT INTO reseptit VALUES(NULL,".$_SESSION['resepti_ruokakunta_id'].",'".$_POST['resepti_haku']."',100)";
-  echo '<br>'.$query_str.'<br>';
+  //echo '<br>'.$query_str.'<br>';
   $kysely=$db->query($query_str);
 }
 
@@ -77,17 +77,24 @@ if(isset($_POST['poista_resepti']))
 {
   $resepti_id = $_POST['reseptit'];
   $query_str = "DELETE FROM reseptit WHERE resepti_id=".$resepti_id;
-  echo '<br>'.$query_str.'<br>';
+  //echo '<br>'.$query_str.'<br>';
   $kysely=$db->query($query_str);
 }
 
-print_r($_POST);
+//print_r($_POST);
 
 $nayta_lomake = false;
 
 if(isset($_SESSION['resepti_ruokakunta_id']))
 {
   $nayta_lomake = true;
+}
+
+if(isset($_POST['annos_koko']) && $_POST['annos_koko'] != '')
+{
+  $stmt=$db->prepare("UPDATE reseptit SET annoskoko=:annos WHERE resepti_id=".$_SESSION['resepti_id']);
+  $stmt->bindParam(':annos',$_POST['annos_koko']);
+  $stmt->execute();
 }
 
 ?>

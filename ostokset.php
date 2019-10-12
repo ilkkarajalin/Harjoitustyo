@@ -5,14 +5,14 @@
 
 $nayta_syotto = false;
 
-print_r($_POST);
+//print_r($_POST);
 
 $query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet';
 
 if(isset($_POST['rajaa_ruoka_aine']))
 {
   $div2 = false;
-  echo '<br>Rajattu haku<br>';
+  //echo '<br>Rajattu haku<br>';
   $query_str = "SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet WHERE ruoka_aine LIKE '%".$_POST['ruoka_aine']."%'";
 }
 
@@ -35,7 +35,7 @@ if(isset($_POST['Lisaa_ostos']))
 
   $query_str = "INSERT INTO ostokset VALUES(NULL,".$ruokakunta_id.",'".$pvm."',".$ruoka_aine_id.",".$hinta.",".$maara.")";
 
-    echo '<br>uusi ostos:<br>'.$query_str.'<br>';
+    //echo '<br>uusi ostos:<br>'.$query_str.'<br>';
     $kysely=$db->query($query_str);
     $query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet';
 }

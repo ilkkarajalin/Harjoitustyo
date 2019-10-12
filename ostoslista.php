@@ -2,7 +2,7 @@
 <?php include "connection.php"; ?>
 
 <?php
-print_r($_POST);
+//print_r($_POST);
 
 $mod_today = 0;
 
@@ -17,7 +17,7 @@ if(!isset($_SESSION['mod_week_ostos']))
 }
 
 $weekday = date("w");
-echo '<br>weekday='.$weekday.'<br>';
+//echo '<br>weekday='.$weekday.'<br>';
 $mod_today = 0;
 
 if($weekday == 0)
@@ -57,7 +57,7 @@ Valitse ruokakunta:
   <select name="ruokakunta" onchange="">
     <?php
       $query_str = "SELECT * FROM ruokakunnat WHERE kayttaja_id=".$_SESSION['user_id']." ORDER BY ruokakunta";
-      echo '<br>'.$query_str.'<br>';
+      //echo '<br>'.$query_str.'<br>';
       $kysely=$db->query($query_str);
 
       foreach ($kysely as $row)

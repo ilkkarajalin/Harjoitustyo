@@ -29,6 +29,22 @@ if(isset($_POST['kirjaudu']))
     include "menu.php";
     echo '<section_3part><div_3part>';
     echo '<p>Olet kirjautunut Reseptoriin käyttäjänä '.$kayttaja.'</p>';
+
+    $query_str = "SELECT * FROM energia_sisallot WHERE kayttaja_id=".$_SESSION['user_id']." ORDER BY ravintoaine LIMIT 3";
+    $kysely=$db->query($query_str);
+
+    $energiat = array();
+
+    foreach ($kysely as $row)
+    {
+      $energiat[] = $row['kj_g'];
+    }
+
+    $_SESSION['e_hiili'] = $energiat[0];
+    $_SESSION['e_prote'] = $energiat[1];
+    $_SESSION['e_rasva'] = $energiat[2];
+
+
   }
     else
     {
@@ -79,6 +95,18 @@ if(isset($_POST['kirjaudu']))
           include "menu.php";
           echo '<section_3part><div_3part>';
           echo '<p>Olet kirjautunut Reseptoriin käyttäjänä '.$kayttaja.'</p>';
+
+          $query_str = "INSERT INTO energia_sisallot VALUES(NULL,'hiilihydraatit',17,".$_SESSION['user_id'].")";
+          $kysely=$db->query($query_str);
+          $query_str = "INSERT INTO energia_sisallot VALUES(NULL,'proteiinit',17,".$_SESSION['user_id'].")";
+          $kysely=$db->query($query_str);
+          $query_str = "INSERT INTO energia_sisallot VALUES(NULL,'rasvat',38,".$_SESSION['user_id'].")";
+          $kysely=$db->query($query_str);
+
+          $_SESSION['e_hiili'] = 17;
+          $_SESSION['e_prote'] = 17;
+          $_SESSION['e_rasva'] = 38;
+
         }
         else
         {
