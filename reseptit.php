@@ -1,112 +1,142 @@
 <?php include "menu.php"; ?>
+<?php include "connection.php"; ?>
+<?php
+
+$query_str_aine = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet WHERE kayttaja_id='.$_SESSION['user_id'].' ORDER BY ruoka_aine';
+
+
+if(isset($_POST['ruokakunta']))
+{
+  $_SESSION['resepti_ruokakunta_id'] = $_POST['ruokakunta'];
+  $query_str_resepti = "SELECT * FROM reseptit WHERE ruokakunta_id=".$_SESSION['resepti_ruokakunta_id'];
+}
+
+if(isset($_POST['rajaa_resepti']))
+{
+    $query_str_resepti = "SELECT * FROM reseptit WHERE resepti LIKE '%".$_POST['resepti_haku']."%' AND ruokakunta_id=".$_SESSION['resepti_ruokakunta_id'];
+}
+
+if(isset($_POST['rajaa_ruoka-aine']))
+{
+  $query_str_aine = "SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet WHERE ruoka_aine LIKE '%".$_POST['ruoka-aine_haku']."%' AND kayttaja_id=".$_SESSION['user_id']." ORDER BY ruoka_aine";
+  echo '<br>';
+  echo $query_str_aine;
+}
+
+if(isset($_POST['tarkastele_resepti']))
+{
+  $valittu_resepti_id = $_POST['reseptit'];
+  $_SESSION['resepti_id'] = $valittu_resepti_id;
+  $query_str_resepti = "SELECT * FROM reseptit WHERE resepti_id=".$valittu_resepti_id;
+}
+
+if(isset($_POST['muokkaa']))
+{
+  $input = $_POST['muokkaa'];
+  $inputs = explode(".",$input);
+  // resepti taulun rivinumero
+  // esitetyn taulun rivinumero
+  $resepti_id = $inputs[0];
+  $taulun_id = $inputs[1];
+  $taulun_arvo = $_POST[$taulun_id];
+
+  //echo '<br>Muokattava resepti_id='.$resepti_id.' ja uusi arvo='.$taulun_arvo.'<br>';
+
+  $query_str = "UPDATE reseptin_aineet SET kaytto_maara=".$taulun_arvo." WHERE id=".$resepti_id;
+  //echo '<br>'.$query_str.'<br>';
+
+  $kysely=$db->query($query_str);
+
+  //echo '<br>';
+
+}
+
+if(isset($_POST['lisaa_ruoka-aine']))
+{
+  $ruoka_aine_id = $_POST['reseptin_aineet'];
+  $query_str = "INSERT INTO reseptin_aineet VALUES(NULL,".$_SESSION['resepti_id'].",".$ruoka_aine_id.",1)";
+  //echo '<br>'.$query_str.'<br>';
+  $kysely=$db->query($query_str);
+}
+
+if(isset($_POST['poista']))
+{
+  $query_str = "DELETE FROM reseptin_aineet WHERE id=".$_POST['poista'];
+  //echo '<br>'.$query_str.'<br>';
+  $kysely=$db->query($query_str);
+}
+
+if(isset($_POST['lisaa_resepti']))
+{
+  $query_str = "INSERT INTO reseptit VALUES(NULL,".$_SESSION['resepti_ruokakunta_id'].",'".$_POST['resepti_haku']."',100)";
+  //echo '<br>'.$query_str.'<br>';
+  $kysely=$db->query($query_str);
+}
+
+if(isset($_POST['poista_resepti']))
+{
+  $resepti_id = $_POST['reseptit'];
+  $query_str = "DELETE FROM reseptit WHERE resepti_id=".$resepti_id;
+  //echo '<br>'.$query_str.'<br>';
+  $kysely=$db->query($query_str);
+}
+
+//print_r($_POST);
+
+$nayta_lomake = false;
+
+if(isset($_SESSION['resepti_ruokakunta_id']))
+{
+  $nayta_lomake = true;
+}
+
+if(isset($_POST['annos_koko']) && $_POST['annos_koko'] != '')
+{
+  $stmt=$db->prepare("UPDATE reseptit SET annoskoko=:annos WHERE resepti_id=".$_SESSION['resepti_id']);
+  $stmt->bindParam(':annos',$_POST['annos_koko']);
+  $stmt->execute();
+}
+
+?>
+
 <section_3part>
   <div_3part>
 Valitse ruokakunta:
 <br>
-<form action="">
+<form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
   <select name="ruokakunta" onchange="">
-    <option value="">Mainiot</option>
-    <option value="">Juoniot</option>
-    <option value="">Meikäläiset</option>
-    <option value="">Virtaset</option>
-    <option value="">Korhoset</option>
+    <?php
+      $query_str = "SELECT * FROM ruokakunnat WHERE kayttaja_id=".$_SESSION['user_id']." ORDER BY ruokakunta";
+      $kysely=$db->query($query_str);
+
+      foreach ($kysely as $row)
+      {
+        $valittu = "";
+
+        if($row['ruokakunta_id'] == $_SESSION['resepti_ruokakunta_id'])
+        {
+          $valittu = " selected";
+        }
+
+        echo '<option value='.$row['ruokakunta_id'].$valittu.'>'.$row['ruokakunta'].'</option>';
+      }
+
+    ?>
   </select>
+  <input type="submit" name="ruokakunta_valinta" value="Valitse">
 </form>
 </div_3part>
 </section_3part>
-<br>
 
-<section_3part>
-  <div_3part>
-    <input type="text" name="resepti_haku" values="" placeholder="Rajaa reseptejä tai lisää uusi" size="25">
-    <input type="submit" name="lisaa_resepti" value="Lisää uusi">
-    <br><br>
-    Reseptit
-    <select class="non_scroll" name="reseptit" size="20" width="50">
-      <option value="">Marjapuuro</option>
-      <option value="">Lasagne</option>
-      <option value="">Pizza</option>
-      <option value="">Hedelmäsmoothie</option>
-      <option value="">Munakas</option>
-    </select>
-  </div_3part>
-  <div_3part>
-      <br><br><br>
-        <input type="submit" name="tarkastele_resepti" value="Tarkastele">
-        <br><br><br>
-        <input type="submit" name="poista_resepti" value="Poista">
+<?php
 
-    </div_3part>
-  <div_3part>
-    <br><br>
-    Reseptin ruoka-aineet
-    <select class="non_scroll" name="resptin_aineet" size="20" width="50">
-      <option value="">Lasagnelevyt 1 pkt 1.59 €</option>
-      <option value="">Tomaattimurska 1 prk 0.98 €</option>
-      <option value="">Juustoraaste Emmental 1 pss 1.59 €</option>
-      <option value="">Maito 1 ltr 0.68 €</option>
-      <option value="">Vehnäjauho 1 dl 0.05 €</option>
-    </select>
-    <br>
-    Reseptin paino 1530 g
-    <br>
-    450 kJ / 100 g
-    <br>
-    Annoskoko 250 g
-    <br>
-    1100 kJ / 250 g
-    <br>
-    Reseptin hinta 10.76 €
-    <br>
-    <table id="ruokakalenteri">
-      <th></th>
-      <th>/ 100 g</th>
-      <th>/ annos</th>
-      <th>kJ %</th>
-      <tr>
-        <th>Hiilihydraatit</th>
-        <td>22 g</td>
-        <td>51 g</td>
-        <td>30 %</td>
-        <tr>
-          <th>Proteiinit</th>
-          <td>12.8 g</td>
-          <td>30.4 g</td>
-          <td>22 %</td>
-          <tr>
-            <th>Rasvat</th>
-            <td>9.4 g</td>
-            <td>23.8 g</td>
-            <td>48 %</td>
+if(isset($_SESSION['resepti_ruokakunta_id']))
+{
+  include "reseptit_resepti.php";
+}
+?>
 
-    </table>
-  </div_3part>
-  <div_3part>
-      <br><br><br>
-        <input type="submit" name="lisaa_ruoka-aine" value="<< Lisää">
-        <br><br><br>
-        Muokkaa:
-        <br>
-        <input type="number" name="ruoka-aine_maara" value=1 style="width: 3em">
-        <br>
-        <input type="submit" name="muuta_maara" value="Muokkaa">
-        <br><br><br>
-        <input type="submit" name="poista_ruoka-aine" value="Poista >>">
-
-    </div_3part>
-  <div_3part>
-    <input type="text" name="ruoka-aine_haku" values="" placeholder="Rajaa ruoka-aineita" size="25">
-    <input type="submit" name="rajaa_ruoka-aine" value="Rajaa">
-    <br><br>
-    Ruoka-aineet
-    <select class="non_scroll" name="resptin_aineet" size="20" width="50">
-      <option value="">Lasagnelevyt</option>
-      <option value="">Tomaattimurska</option>
-      <option value="">Juustoraaste Emmental</option>
-      <option value="">Maito</option>
-      <option value="">Vehnäjauho</option>
-    </select>
-  </div_3part>
 </section_3part>
+</form>
 
 <?php include "footer.php"; ?>
