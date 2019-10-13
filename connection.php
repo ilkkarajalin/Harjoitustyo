@@ -10,8 +10,8 @@
 
 try
 {
-  $dsn = "mysql:host=mysli.oamk.fi;dbname=opisk_t8rail00";
-  $db = new PDO ($dsn, "t8rail00", "qkJXjLkpBwampeAt");
+  $dsn = "mysql:host=localhost;dbname=reseptori";
+  $db = new PDO ($dsn, "phpUser", "phpPass");
   //print ("Connected\n");
 }
   catch (PDOException $e)
