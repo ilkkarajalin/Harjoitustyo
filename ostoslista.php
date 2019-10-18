@@ -170,7 +170,7 @@ for($q=0;$q<5;$q++)
         <?php
         $query_str = "select ruoka_aineet.ruoka_aine,reseptin_aineet.kaytto_maara*count(ruokakalenteri.resepti_id) AS lkm,AVG(ostokset.hinta_hankinta_yks) AS hinta,ruoka_aineet.paino_kaytto_yks,ruoka_aineet.paino_hankinta_yks,yksikot.yksikko FROM ruoka_aineet JOIN reseptin_aineet ON reseptin_aineet.ruoka_aine_id=ruoka_aineet.ruoka_aine_id JOIN reseptit ON reseptit.resepti_id=reseptin_aineet.resepti_id JOIN ruokakalenteri ON ruokakalenteri.resepti_id=reseptit.resepti_id JOIN ostokset ON ostokset.ruoka_aine_id=ruoka_aineet.ruoka_aine_id JOIN yksikot ON yksikot.yksikko_id=ruoka_aineet.hankinta_yks_id WHERE ruokakalenteri.ruokakunta_id=".$_SESSION['ostoslista_ruokakunta_id']." AND ruokakalenteri.pvm>='".$query_start."' AND ruokakalenteri.pvm<='".$query_end."' GROUP BY ruoka_aineet.ruoka_aine_id";
 
-        //echo '<br>'.$query_str.'<br>';
+        echo '<br>'.$query_str.'<br>';
 
         $kysely=$db->query($query_str);
         $yhteensa = 0;
