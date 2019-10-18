@@ -59,7 +59,7 @@ if(isset($_POST['lisaa_ruoka-aine']))
   $query_str = "INSERT INTO ruoka_aineet VALUES(NULL,".$_SESSION['user_id'].",'".$_POST['ruoka_aine']."',1,1000,1,1000,0,0,0)";
     //echo '<br>uusi ruoka-aine:<br>'.$query_str.'<br>';
     $query_str = "CALL lisaa_ruoka_aine(".$_SESSION['user_id'].",'".$_POST['ruoka_aine']."')";
-    echo '<br>uusi ruoka-aine:<br>'.$query_str.'<br>';
+    //echo '<br>uusi ruoka-aine:<br>'.$query_str.'<br>';
     $kysely=$db->query($query_str);
     $query_str = 'SELECT ruoka_aine_id,ruoka_aine FROM ruoka_aineet';
 }
