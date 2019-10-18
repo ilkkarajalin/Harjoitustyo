@@ -56,7 +56,7 @@
     <?php
 
     $query_str = "SELECT ruoka_aineet.ruoka_aine,reseptin_aineet.kaytto_maara*ruoka_aineet.paino_kaytto_yks AS paino, sisalto_hiilih,sisalto_protei,sisalto_rasva FROM ruoka_aineet JOIN reseptin_aineet ON reseptin_aineet.ruoka_aine_id=ruoka_aineet.ruoka_aine_id WHERE reseptin_aineet.resepti_id=".$_SESSION['resepti_id'];
-    //echo '<br>'.$query_str.'<br>';
+    echo '<br>'.$query_str.'<br>';
     $kysely=$db->query($query_str);
 
     $hiilihydraatti = 17;
